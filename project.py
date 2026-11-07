@@ -82,15 +82,30 @@ class Matrix():
 
     @classmethod
     def identity(cls, n):
+        '''Creates an identity Matrix'''
+
+        identity_data = [[0 for _ in range(n)] for _ in range(n)]
+        for i in range(n):
+            for j in range(n):
+                if i == j:
+                    identity_data[i][j] = 1
+
+        return cls(identity_data)
+
+    def is_square(self):
+        '''Checks if a matrix is a square'''
+        return self.rows == self.cols
+
+
 
 
         
 # Iterative tests
-A = Matrix([[1, 2], [2, 3], [1, 2]])
+A = Matrix([[1, 2], [2, 3]])
 B = Matrix([[2, 0], [4, 1]])
  
-print(B.__matmul__(A))
-    
+print(B.__matmul__(Matrix.identity(2)))
+
 
         
 
