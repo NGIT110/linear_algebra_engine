@@ -1,6 +1,9 @@
 ### README INFO ###
 Used 3 different errors rather than a single MatrixError to improve its usability by external users.
 
+I introduced a subtract dunder method, however, I could have used scalar multiplication by negative 1 and then added to avoid repeating similar code, however by using a sub dunder it makes it easier for a user to complete a subtraction rather than having to wait for 2 operations.
+In making __truediv__, I repeted similar code to __mul__ to avoid double rounding to improve accuracy.
+
 ### New Learnings ###
 
 # Strassen's Algorithm

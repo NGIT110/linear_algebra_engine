@@ -60,11 +60,51 @@ class Matrix():
             return NotImplemented # Signals operator doesn't support addition of non-matrices
         
         if self.rows != other.rows or self.cols != other.cols:
-            raise DimensionMismatchError(f"Cannot add a {self.rows}x{self.cols} matrix to {other.rows}x{other.cols} matrix")
+            raise DimensionMismatchError(f"Cannot add a {self.rows}x{self.cols} from a {other.rows}x{other.cols} matrix")
 
         new_matrix = Matrix([[a+b for a, b in zip(row_a, row_b)] for row_a, row_b in zip(self.data, other.data)])
 
         return new_matrix
+
+    def __sub__(self, other):
+        '''Subtracts 1 matrix from another'''
+
+        if not isinstance(other, Matrix):
+            return NotImplemented 
+        
+        if self.rows != other.rows or self.cols != other.cols:
+            raise DimensionMismatchError(f"Cannot subtract a {other.rows}x{other.cols} from a {self.rows}x{self.cols} matrix")
+
+        new_matrix = Matrix([[a-b for a, b in zip(row_a, row_b)] for row_a, row_b in zip(self.data, other.data)])
+
+        return new_matrix
+
+    def __mul__(self, other):
+        '''Multiplies matrix by scalar'''
+
+        if isinstance(other, float) or isinstance(other, int):
+            return Matrix([[a*other for a in row_a] for row_a in self.data])
+        else:
+            return NotImplemented
+
+    def __rmul__(self, other):
+        '''Completes reverse multiplication if self is the scalar'''
+        return self * other
+
+    def __neg__(self):
+        '''Returns negative matrix'''
+        return self * -1
+
+    def __truediv__(self, other):
+        '''Completes true division'''
+
+        if not isinstance(other, float) and not isinstance(other, int):
+            return NotImplemented
+
+        if other == 0:
+            raise ZeroDivisionError("division by 0")
+
+        return Matrix([[a / other for a in row_a] for row_a in self.data])
 
     def __matmul__(self, other):
         '''Multiplies 2 matrices'''
@@ -123,12 +163,25 @@ class Matrix():
         return f"Matrix({self.data})"
 
 
+
+def determinant(matrix):
+    '''Returns Determinant of a matrix'''
+
+    if not matrix.is_square():
+        raise DimensionMismatchError("Cannot find determinant of non-square matrix")
+
+
+    
+
+
+
         
 # Iterative tests
 A = Matrix([[1, 2], [2, 3]])
 B = Matrix([[2, 0], [4, 1]])
  
-print(B.__matmul__(Matrix.identity(2)))
+print(B - A)
+print(A.is_square())
 
 
         
