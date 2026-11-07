@@ -55,18 +55,41 @@ class Matrix():
             return NotImplemented # Signals operator doesn't support addition of non-matrices
         
         if self.rows != other.rows or self.cols != other.cols:
-            raise DimensionMismatchError(f"Cannot add {self.rows}x{self.cols} matrix to {other.rows}x{other.cols} matrix")
+            raise DimensionMismatchError(f"Cannot add a {self.rows}x{self.cols} matrix to {other.rows}x{other.cols} matrix")
 
         new_matrix = Matrix([[a+b for a, b in zip(row_a, row_b)] for row_a, row_b in zip(self.data, other.data)])
 
         return new_matrix
 
+    def __matmul__(self, other):
+        '''Multiplies 2 matrices'''
+
+        if not isinstance(other, Matrix):
+            return NotImplemented 
+
+        if self.cols != other.rows:
+            raise DimensionMismatchError(f"Cannot multiply a {self.rows}x{self.cols} matrix with a {other.rows}x{other.cols} matrix")
+
+        result_data = [[0.0 for _ in range(other.cols)] for _ in range(self.rows)] # Initialises resulting matrix with correct size
+
+        # Completes matrix multiplication with 3 loops - O(n^3)
+        for i in range(self.rows):
+            for j in range(other.cols):
+                for k in range(self.cols):
+                    result_data[i][j] += self.data[i][k] * other.data[k][j]
+
+        return Matrix(result_data)
+
+    @classmethod
+    def identity(cls, n):
+
+
         
 # Iterative tests
-A = Matrix([[1, 2], [2, 3]])
+A = Matrix([[1, 2], [2, 3], [1, 2]])
 B = Matrix([[2, 0], [4, 1]])
  
-print(A+B)
+print(B.__matmul__(A))
     
 
         
