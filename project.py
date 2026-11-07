@@ -1,3 +1,8 @@
+import math
+
+# Global constants
+EPSILON = 1e-9
+
 class DimensionMismatchError(Exception):
     '''Raised when matrices are incompatible'''
     pass
@@ -96,7 +101,26 @@ class Matrix():
         '''Checks if a matrix is a square'''
         return self.rows == self.cols
 
+    def __eq__(self, other):
+        '''Checks for equality'''
+    
+        if not isinstance(other, Matrix):
+            return NotImplemented 
 
+        if self.rows != other.rows or self.cols != other.cols: # Checks if 2 matrices are same shape
+            return False
+
+        # Compares each corresponding element
+        for row_a, row_b in zip(self.data, other.data):
+
+            if not all(math.isclose(a, b, abs_tol=EPSILON) for a, b in zip(row_a, row_b)): # Checks for approximate eqaulity
+                return False
+
+        return True
+
+    def __repr__(self):
+        '''Represents Matrix in string form for testing'''
+        return f"Matrix({self.data})"
 
 
         
