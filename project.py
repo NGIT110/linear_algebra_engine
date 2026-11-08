@@ -163,7 +163,6 @@ class Matrix():
         return f"Matrix({self.data})"
 
 
-
 def determinant(matrix):
     '''Returns Determinant of a matrix'''
 
@@ -172,6 +171,16 @@ def determinant(matrix):
 
     if not matrix.is_square():
         raise DimensionMismatchError("Cannot find determinant of non-square matrix")
+
+    matrix_copy = matrix
+
+
+def _gaussian_elimination(data):
+    '''Helper for determinant function'''
+
+
+
+
 
 if __name__ == "main":
     # Iterative tests
