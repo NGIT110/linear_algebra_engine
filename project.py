@@ -167,21 +167,19 @@ class Matrix():
 def determinant(matrix):
     '''Returns Determinant of a matrix'''
 
+    if not isinstance(matrix, Matrix):
+        raise InvalidMatrixError("Not a valid matrix, so cannot find determinant")
+
     if not matrix.is_square():
         raise DimensionMismatchError("Cannot find determinant of non-square matrix")
 
-
-    
-
-
-
-        
-# Iterative tests
-A = Matrix([[1, 2], [2, 3]])
-B = Matrix([[2, 0], [4, 1]])
+if __name__ == "main":
+    # Iterative tests
+    A = Matrix([[1, 2], [2, 3]])
+    B = Matrix([[2, 0], [4, 1]])
  
-print(B - A)
-print(A.is_square())
+    print(B - A)
+    print(A.is_square())
 
 
         
