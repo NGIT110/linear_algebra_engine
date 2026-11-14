@@ -172,24 +172,54 @@ def determinant(matrix):
     if not matrix.is_square():
         raise DimensionMismatchError("Cannot find determinant of non-square matrix")
 
-    matrix_copy = matrix
+    matrix_copy = [row[:] for row in matrix.data]
 
 
-def _gaussian_elimination(data):
-    '''Helper for determinant function'''
+    def _gaussian_elimination(data):
+        '''Helper for determinant function'''
+
+        n = len(data)
+        sign = 1
+
+        for i in range(n):
+            # Find row with largest absolute value
+            pivot_row = i
+            for k in range(i+1, n):
+                if abs(data[k][i]) > abs(data[pivot_row][i]):
+                    pivot_row = k
+
+            # if largest element in column is 0, matrix is singular
+            if abs(data[pivot_row][i]) < 1e-12:
+                return 0
+
+            # Swaps rows
+            if pivot_row != i:
+                data[i], data[pivot_row] = data[pivot_row], data[i]
+                sign *= -1 # Flips sign
+
+            # Eliminates elements below pivot
+            for k in range(i+1, n):
+                factor = data[k][i] / data[i][i]
+                for j in range(i, n):
+                    data[k][j] -= factor * data[i][j]
+
+        det = sign
+        for i in range(n):
+            det *= data[i][i]
+
+        return det
+
+    return _gaussian_elimination(matrix_copy)
 
 
-
-
-
-if __name__ == "main":
+if __name__ == "__main__":
     # Iterative tests
-    A = Matrix([[1, 2], [2, 3]])
+    A = Matrix([[1, 2, 5], [2, 3, 1], [1, 4, 2]])
     B = Matrix([[2, 0], [4, 1]])
  
-    print(B - A)
+    #print(B - A)
     print(A.is_square())
-
+    print(determinant(A))
 
         
 
