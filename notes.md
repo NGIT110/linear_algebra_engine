@@ -56,6 +56,38 @@ A method used to calculate the **determinant** of a large square matrix (3 × 3 
 | **Partial** | Down the current column only | $O(n^2)$ | **Standard.** Ideal balance of speed and numerical accuracy. |
 | **Complete** | Entire remaining submatrix | $O(n^3)$ | **Rare.** Too computationally slow for minimal extra accuracy. |
 
+# Matrix Inversion (`notes.md`)
+
+## 1. Core Concept
+The **inverse** of a square matrix A (written as A⁻¹) is the matrix that cancels A out when multiplied together, leaving the **Identity Matrix (I)**:
+
+\[A \times A^{-1} = A^{-1} \times A = I\]
+
+* **Identity Matrix (I):** The matrix equivalent of the number 1. It has 1s on the main diagonal and 0s everywhere else. Multiplying any matrix by I leaves it unchanged.
+
+### When Does an Inverse Exist?
+A matrix can **only** be inverted if it meets two conditions:
+1. **It must be square:** Same number of rows and columns (n × n).
+2. **It must be non-singular:** Its determinant cannot be zero (\(\det(A) \neq 0\)). If \(\det(A) = 0\), the matrix "squishes" data flat and cannot be reversed.
+
+---
+
+## 2. How Gauss-Jordan Elimination Works
+To find A⁻¹ in code for any n × n matrix, we use **Gauss-Jordan Elimination**:
+
+1. **Augment:** Glue the identity matrix I onto the right side of A to create a wide n × 2n grid: \([A \mid I]\).
+2. **Row Reduce:** Use legal row operations to turn the left side (A) into the identity matrix (I).
+3. **Extract:** Every operation done to the left side is also applied to the right side. Once the left side becomes I, the right side has transformed into A⁻¹: \([I \mid A^{-1}]\).
+
+### The 3 Legal Row Operations
+* **Swap:** Switch the positions of two rows.
+* **Scale:** Multiply or divide an entire row by a non-zero number.
+* **Eliminate (Combine):** Add or subtract a multiple of one row from another row.
+
+### Why Partial Pivoting?
+Computers store decimals with tiny rounding errors. Before cleaning up column i, we look down that column and **swap the row with the largest absolute value** into the diagonal pivot spot. This prevents division by zero and keeps floating-point math accurate.
+
+
 
 ### Algorithmic optimisation ###
 

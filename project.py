@@ -211,6 +211,58 @@ def determinant(matrix):
 
     return _gaussian_elimination(matrix_copy)
 
+def invert_matrix(matrix):
+    '''Returns the inverse of a square Matrix'''
+
+    # Validate the Matrix object BEFORE accessing .data
+    if not isinstance(matrix, Matrix):
+        raise InvalidMatrixError("Not a valid matrix, so cannot find inverse")
+
+    if not matrix.is_square():
+        raise DimensionMismatchError("Cannot find inverse of non-square matrix")
+
+    A = matrix.data
+    n = matrix.rows
+
+    # Build the augmented matrix [A | I]
+    M = []
+    for i in range(n):
+        identity_row = [1.0 if i == j else 0.0 for j in range(n)]
+        M.append(A[i][:] + identity_row)
+
+    # Process one column at a time
+    for i in range(n):
+
+        # Partial Pivoting: find the largest value in column i
+        pivot_row = i
+        for r in range(i + 1, n):
+            if abs(M[r][i]) > abs(M[pivot_row][i]):
+                pivot_row = r
+
+        # Check if the matrix is singular using your custom exception
+        if abs(M[pivot_row][i]) < 1e-12:
+            raise SingularMatrixError("Cannot find inverse if matrix has 0 determinant")
+
+        # Swap the current row with the best pivot row
+        if pivot_row != i:
+            M[i], M[pivot_row] = M[pivot_row], M[i]
+
+        # Scale the pivot row so the pivot becomes 1
+        pivot_value = M[i][i]
+        for c in range(2 * n):
+            M[i][c] /= pivot_value
+
+        # Eliminate all other entries in column i
+        for r in range(n):
+            if r != i:
+                factor = M[r][i]
+                for c in range(2 * n):
+                    M[r][c] -= factor * M[i][c]
+
+    # Extract the right half and return a new Matrix object
+    inverse_data = [row[n:] for row in M]
+    return Matrix(inverse_data)
+
 
 if __name__ == "__main__":
     # Iterative tests
@@ -220,7 +272,7 @@ if __name__ == "__main__":
     #print(B - A)
     print(A.is_square())
     print(determinant(A))
-
+    print(invert_matrix(A))
         
 
 
